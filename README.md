@@ -1,6 +1,6 @@
 # CCT-Harmonics-Optimizer
 
-This software is designed to automatically optimize harmonic drive parameters for CCT (canted-cosine-theta) magnets in order to achieve perfect magnetic field quality. Three optimizers are provided to achieve different objectives. This project is part of the FCC-ee HTS4 research project at CERN.
+This software is designed to automatically optimize harmonic drive parameters for canted-cosine-theta (CCT) magnets in order to achieve perfect magnetic field quality. Three optimizers are provided to achieve different objectives. This project is part of the FCC-ee HTS4 research project at CERN.
 
 ## Overview
 
@@ -48,8 +48,8 @@ Follow the [Prerequisites section](https://github.com/ThatTilux/CCTools/blob/mai
 
 ## Theoretical Background
 
-The magnetic field produced by CCT magnets can be described by a series of harmonics, denoted as B1, B2, ..., B10. 
-In this context, B1 represents the dipole field, B2 represents the quadrupole field, and so on up to the decapole field (B10).
+The magnetic field produced by electromagnets can be described by a series of harmonics, denoted as B1, B2, ..., B10. 
+In this context, B1 represents the dipole field, B2 represents the quadrupole field, and so on up to the decapole field (B10). We omit all Bn for n > 10 here since they are not relevant for this use case.
 
 When modeling CCT magnets using the RAT Library, custom harmonic components can be defined to fine-tune the magnetic field. These custom components allow for precise control over the magnetic field distribution. 
 
@@ -57,14 +57,14 @@ Each custom component can be characterized by its scaling function.
 Custom harmonic components in the CCT model have a specific number of poles (X) and are associated primarily with the harmonic BX. When simulating the magnet and computing harmonics, we are interested in a few properties for each harmonic:
 
 - **Bn Curve**: The Bn curve represents the magnitude of the harmonic along the length of the magnet, measured in Tesla (T).
-- **bn Value**: The bn value is the integral of the Bn curve over the length of the magnet. It indicates the overall magnitude of the harmonic component. The largest bn value is 10,000 and all others are relative to that one.
+- **bn Value**: The bn value is the (normalized) integral of the Bn curve over the length of the magnet. It indicates the overall magnitude of the harmonic component. The bn values are normalized, setting the largest one to 10,000 and all others relative to it.
 
 In addition to the B components, we also consider the A components when analyzing the magnetic field:
 
 - **An Curve**: The An curve represents the phase angle of the harmonic along the length of the magnet (i.e., the change in the harmonic's direction). The An curve provides insight into how the harmonic component rotates or shifts as it propagates along the magnet's length.
-- **an Value**: The an value is the integral of the An curve over the length of the magnet. It quantifies the overall phase shift or rotation of the harmonic component.
+- **an Value**: The an value is the (normalized) integral of the An curve over the length of the magnet. It quantifies the overall phase shift or rotation of the harmonic component. The an values are normalized in the same way as the bn ones.
 
-Together, the Bn and An curves, along with their respective bn and an values, provide a comprehensive understanding of the magnetic field characteristics within CCT magnets.
+Together, the Bn and An curves, along with their respective bn and an values, provide a comprehensive understanding of the magnetic field characteristics.
 
 
 
@@ -76,18 +76,18 @@ The optimizer requires a JSON file of a CCT magnet, created by the [RAT-GUI soft
     - The axis (and therefore the magnet) must span across the z-axis. This is the default in RAT.
 - The JSON file should contain a mesh calculation in the calculation tree. The optimizer will use the first mesh calculation found.
 
-- The JSON file should include custom CCT harmonics for all harmonics B1 to B10 (except for the main harmonic, e.g., B2 for a quadrupole) in the model tree. These harmonics will be optimized by the software.
+- The JSON file should include custom CCT harmonics for all harmonics B1 to B10 (except for the main harmonic, e.g., B2 for a quadrupole) in the model tree. These custom harmonics will be optimized by the software.
     - The custom harmonics should be named B1, B2, ...
     - If there is a custom component for the main harmonic, it cannot be named B1/B2/...
     - The custom harmonics must have an 'amplitude' of 'constant' or 'linear' (further restrictions to this apply depending on the optimizer used).
     - All custom harmonics with the same number of poles should have the same name and scaling function parameters, ensuring they are optimized together (e.g. when there are different custom harmonics for the different layers of a CCT).
 - If the an Optimizer is to be used, skew harmonic components A1 to A10 need to be included with the same restrictions as the B harmonics. Additionally, these restrictions apply:
-    - Contrary to the B components, the skew harmonic component for the main component (e.g., A2 for a quadrupule) needs to be included here as well and named accordingly (e.g., 'A2').
+    - Contrary to the B components, the skew harmonic component for the main component (e.g., A2 for a quadrupole) needs to be included here as well and named accordingly (e.g., 'A2').
     - All skew harmonic components need to have an 'amplitude' of 'constant'.
     
 
 
-Place the JSON file of the magnet in the `data` directory. The JSON file will not be modified by the software. 
+Place the JSON file of the magnet in the `data` directory. The original JSON file will not be modified by the software. All changes are made to a copy of the original file.
 
 Detailed logs of every run of the software are saved in the `logs` directory.
 
@@ -97,14 +97,15 @@ To run the software, use the command specified above ```./bin/main``` and select
 
 An example model `cct.json` can be found in the `examples` directory. To test this software, follow these steps:
 
-1. Place the `cct.json` file in the `data` directory.
-2. Run the program:
+1. Follow the installation steps outlined in this README
+2. Place the `cct.json` file in the `data` directory.
+3. Run the program:
     ```sh
     ./bin/main
     ```
-3. Follow the prompts to select the correct JSON file, select the bn Optimizer and enter 0.1 as the maximum absolute bn value.
+4. Follow the prompts to select the correct JSON file, select the bn Optimizer, and enter 0.1 as the maximum absolute bn value.
 
-The program will terminate after a some minutes, providing the optimal parameters.
+The program will terminate after some minutes, providing the optimal parameters.
 
 ## Optimizers
 
@@ -116,7 +117,7 @@ The goal of this optimizer is to adjust the custom harmonics so that the bn valu
 
 **Background**
 
-This optimizer considers custom harmonics with an 'amplitude' of 'constant' or 'linear'. For constant scaling functions, the 'constant' parameter will be optimized. For linear ones, the 'slope' paramater will be optimized. 
+This optimizer considers custom harmonics with an 'amplitude' of 'constant' or 'linear'. For constant scaling functions, the 'constant' parameter will be optimized. For linear ones, the 'slope' parameter will be optimized. 
 The relationship between the respective scaling function parameter of a custom harmonic and the bn value of that harmonic is almost linear, allowing for a fairly simple optimization.
 
 **Approach**
@@ -126,14 +127,14 @@ One custom harmonic is optimized at a time. To get the bn value of this harmonic
 1. The optimizer performs harmonic calculations for at least two different values of the scaling function parameter (constant or slope).
 2. A linear regression is applied to extrapolate the optimal parameter value that results in a bn value of 0.
 
-In one round, all harmonics B1 to B10 are optimized once using this procedure.
+In a round, all harmonics B1 to B10 are optimized once using this procedure, except for the main one.
 
 Since the relationship between the scaling function constant and the respective bn value is not perfectly linear and the custom harmonic with X poles does not only influence the harmonic BX but also the others, the optimizer runs multiple rounds.
 The optimizer will run these rounds until all harmonic bn values are below the user-specified margin. The default margin is 0.1. Caution is advised with lower values as runtime might explode.
 
 **Limitations**
 
-For some magnets, the optimal configuration (with all bn values 0) breaks the magnet (e.g., by increasing length of the magnet by a few orders of magnitude). In this case, the optimizer will try to approach the optimal solution as close as possible. This can be solved by changing the magnet model manually (e.g., by removing current leads and layer connectors or changing their shape; this is the issue in most cases).
+For some magnets, the optimal configuration (with all bn values 0) breaks the magnet (e.g., by increasing length of the magnet by a few orders of magnitude). In this case, the optimizer will try to approach the optimal solution as close as possible. This can be solved by changing the magnet model manually.
 
 In certain cases of this, the optimizer might not terminate as it continuously gets closer to the optimal solution, never reaching it.
 
@@ -169,16 +170,16 @@ Below is an example result of the an Optimizer on a quadrupole model. The left a
 
 **Objective**
 
-Similarly to the bn Optimizer, this optimizer also adjusts the custom harmonics to bring the bn values to 0. Additionally, it optimizes the custom harmonics to obtain Bn curves with a favourable shape. 
+Similarly to the bn Optimizer, this optimizer also adjusts the custom harmonics to bring the bn values to 0. Additionally, it optimizes the custom harmonics to obtain Bn curves with a favorable shape. 
 
 **Background**
 
 This optimizer requires all custom harmonics to have an 'amplitude' of 'linear'. Both the 'offset' and 'slope' parameters of the scaling function will be optimized.
 Again, the relationship between these two paramaters and the respective bn value is almost linear. 
 
-"Favourable" Bn curves are those that have a shape as constant as possible, indicating that the magnitude of the harmonic does not significantly change over the length. 
+"Favorable" Bn curves are those that have a shape as constant as possible, indicating that the magnitude of the harmonic does not significantly change over the length. 
 
-This is characterized numerically by fitting a linear function to the Bn curve and considering the slope of this fitted function. When this slope is near 0, the linear function is almost constant. This suggests that the Bn curve is somewhat constant, indicating that its shape is favourable. 
+This is characterized numerically by fitting a linear function to the Bn curve and considering the slope of this fitted function. When this slope is near 0, the linear function is almost constant. This suggests that the Bn curve is somewhat constant, indicating that its shape is favorable. 
 
 The relationship between the two scaling function parameters and the slope of this fitted function is also almost linear.
 
@@ -199,7 +200,7 @@ The limitations of the bn Optimizer apply here as well.
 
 **Example**
 
-Below is an example result of the Grid Search Optimizer on a quadrupole model. The left are the harmonics before the optimizer and the right are the ones after. All bn values were optimized close to 0 and all Bn curves show favourable shapes. The runtime was 60 minutes on a machine with CUDA and a RTX 3080Ti. For larger magnet models, the runtime can reach 5 hours with the same hardware.
+Below is an example result of the Grid Search Optimizer on a quadrupole model. The left are the harmonics before the optimizer and the right are the ones after. All bn values were optimized close to 0 and all Bn curves show favorable shapes. The runtime was 60 minutes on a machine with CUDA and a RTX 3080Ti. For larger magnet models, the runtime can reach 5 hours with the same hardware.
 
 <div align="center">
 <img width="684" alt="Before vs. After for an example of the Grid Search Optimizer" src="https://github.com/user-attachments/assets/1707c8a1-4bc0-4103-95d7-ad71efcd180d">
@@ -208,7 +209,7 @@ Below is an example result of the Grid Search Optimizer on a quadrupole model. T
 ## Author
 
 Ole Kuhlmann  
-Email: [tim.ole.kuhlmann@cern.ch](mailto:tim.ole.kuhlmann@cern.ch)  
+Email: [ole.kuhlmann@rwth-aachen.de](mailto:ole.kuhlmann@rwth-aachen.de)  
 GitHub: [ThatTilux](https://github.com/ThatTilux)
 
 ## License

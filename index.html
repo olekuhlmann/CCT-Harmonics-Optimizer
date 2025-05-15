@@ -95,7 +95,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="textblock"><p>This software is designed to automatically optimize harmonic drive parameters for CCT (canted-cosine-theta) magnets. Three optimizers are provided to achieve different objectives.</p>
 <h2><a class="anchor" id="autotoc_md0"></a>
 Optimizers</h2>
-<p>For a detailed physics motivation of each optimizer, consult the <a href="https://github.com/ThatTilux/CCT-Harmonics-Optimizer/tree/main" target="_blank">README</a> file of this repository.</p>
+<p>For a detailed physics motivation of each optimizer, consult the <a href="https://github.com/olekuhlmann/CCT-Harmonics-Optimizer/tree/main" target="_blank">README</a> file of this repository.</p>
 <p><a class="el" href="classBnOptimizer.html">bnOptimizer</a></p>
 <p>This optimizer optimizes the scaling function of harmonic drives linearly. The objective is achieved when the absolute bn values of all components are below a specified threshold. This optimizer performs several rounds of linear optimizations until the objective is met. In each round, all harmonic drives present in the model (except for the main component) are optimized one by one. The <code>constant</code> or <code>slope</code> parameter of the scaling function (depending on the <code>amplitude</code> of the harmonic drive) is optimized linearly; the optimizer changes the parameter in small steps and calculates the bn value for each step. The optimizer then fits a linear function to the data points and extracts the root of the function as the new parameter value.</p>
 <p><a class="el" href="classAnOptimizer.html">anOptimizer</a></p>

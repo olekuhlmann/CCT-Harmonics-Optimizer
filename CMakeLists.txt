@@ -40,7 +40,7 @@ include(FetchContent)
 
 FetchContent_Declare(
   CCTools
-  GIT_REPOSITORY https://github.com/ThatTilux/CCTools.git
+  GIT_REPOSITORY https://github.com/olekuhlmann/CCTools.git
   GIT_TAG        main
 )
 

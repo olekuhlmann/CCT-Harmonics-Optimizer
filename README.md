@@ -4,10 +4,10 @@ This software is designed to automatically optimize harmonic drive parameters fo
 
 ## Overview
 
-This software utilizes the [CCTools](https://github.com/ThatTilux/CCTools) library, which is built on top of the open-source [RAT-Library](https://rat-gui.com/library.html).
+This software utilizes the [CCTools](https://github.com/olekuhlmann/CCTools) library, which is built on top of the open-source [RAT-Library](https://rat-gui.com/library.html).
 
 ## Documentation
-The documentation of this application can be viewed [here](https://thattilux.github.io/CCT-Harmonics-Optimizer). To run the software with an example model, follow the Installation and Example sections below.
+The documentation of this application can be viewed [here](https://olekuhlmann.github.io/CCT-Harmonics-Optimizer). To run the software with an example model, follow the Installation and Example sections below.
 
 ## Installation
 
@@ -15,7 +15,7 @@ The documentation of this application can be viewed [here](https://thattilux.git
 
 **Note: This software was made for Linux.**
 
-Follow the [Prerequisites section](https://github.com/ThatTilux/CCTools/blob/main/README.md#prerequisites) from CCTools to install required dependencies. Additionally, install the dependencies listed below.
+Follow the [Prerequisites section](https://github.com/olekuhlmann/CCTools/blob/main/README.md#prerequisites) from CCTools to install required dependencies. Additionally, install the dependencies listed below.
 
 1. **Eigen3**
     - Eigen3 is a library used for linear algebra computations
@@ -28,7 +28,7 @@ Follow the [Prerequisites section](https://github.com/ThatTilux/CCTools/blob/mai
 
 1. Clone this repository and build the software:
     ```sh
-    git clone https://github.com/ThatTilux/CCT-Harmonics-Optimizer.git
+    git clone https://github.com/olekuhlmann/CCT-Harmonics-Optimizer.git
     cd cct-harmonics-optimizer
     mkdir build
     cd build
@@ -210,7 +210,7 @@ Below is an example result of the Grid Search Optimizer on a quadrupole model. T
 
 Ole Kuhlmann  
 Email: [ole.kuhlmann@rwth-aachen.de](mailto:ole.kuhlmann@rwth-aachen.de)  
-GitHub: [ThatTilux](https://github.com/ThatTilux)
+GitHub: [olekuhlmann](https://github.com/olekuhlmann)
 
 ## License
 

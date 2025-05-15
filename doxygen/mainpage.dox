@@ -5,7 +5,7 @@
  *
  * ## Optimizers
  *
- * For a detailed physics motivation of each optimizer, consult the <a href="https://github.com/ThatTilux/CCT-Harmonics-Optimizer/tree/main" target="_blank">README</a> file of this repository.
+ * For a detailed physics motivation of each optimizer, consult the <a href="https://github.com/olekuhlmann/CCT-Harmonics-Optimizer/tree/main" target="_blank">README</a> file of this repository.
  *
  * \ref BnOptimizer "bnOptimizer"
  *
